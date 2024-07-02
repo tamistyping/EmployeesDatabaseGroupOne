@@ -111,7 +111,7 @@ public class DataSanitisation {
     private static boolean isLeapYear(int year) {
         return (year % 4 == 0 && year % 100 != 0 || year % 400 == 0);
     }
-
+    //TODO Change DoB to only accept MM/DD/YYYY, anything else is corrupt
     public static boolean isDateOfBirthValid(String dateOfBirth) {
         String[] parts = dateOfBirth.split("/");
         if (parts.length != 3) {
@@ -140,7 +140,7 @@ public class DataSanitisation {
         }
         return false;
     }
-
+    //TODO Change DoJ to only accept MM/DD/YYYY, anything else is corrupt
     public static boolean isDateOfJoiningValid(String dateOfJoining) {
         String[] parts = dateOfJoining.split("/");
         if (parts.length != 3) {
