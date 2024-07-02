@@ -1,6 +1,5 @@
-package com.sparta.g1;
+package com.sparta.g1.logger;
 
-import java.io.IOException;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;

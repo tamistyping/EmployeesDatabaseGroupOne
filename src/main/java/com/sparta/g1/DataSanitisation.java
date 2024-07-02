@@ -1,17 +1,12 @@
 package com.sparta.g1;
 
-import java.io.IOException;
+import com.sparta.g1.logger.AppLogger;
+
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.time.format.DateTimeParseException;
-import java.util.HashSet;
-import java.util.Set;
 
 public class DataSanitisation {
 

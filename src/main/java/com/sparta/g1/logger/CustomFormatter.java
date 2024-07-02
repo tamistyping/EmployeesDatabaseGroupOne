@@ -1,4 +1,4 @@
-package com.sparta.g1;
+package com.sparta.g1.logger;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
