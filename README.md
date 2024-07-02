@@ -1,6 +1,3 @@
-
-markdown
-Copy code
 # Employee Data Management System
 
 ## Overview
