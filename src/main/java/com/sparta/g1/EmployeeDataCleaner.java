@@ -6,12 +6,13 @@ import com.sparta.g1.utilities.DateValidation;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.LinkedHashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class EmployeeDataCleaner {
 
-    private static final Logger logger = AppLogger.getLogger(Level.ALL, Level.INFO, true);
+    private static final Logger logger = AppLogger.getLogger(Level.ALL, Level.INFO, false);
 
     private static int numberOfCorruptedEntries = 0;
 
@@ -50,32 +51,13 @@ public class EmployeeDataCleaner {
         }
     }
 
-    private static boolean isDateValid(String date, int minYear, int maxYear, String dateType) {
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-            LocalDate parsedDate = LocalDate.parse(date, formatter);
-            int year = parsedDate.getYear();
-            int month = parsedDate.getMonthValue();
-            int day = parsedDate.getDayOfMonth();
 
-            if (year < minYear || year > maxYear || !DateValidation.isValidDayOfMonth(month, day, year)) {
-                numberOfCorruptedEntries++;
-                logger.log(Level.WARNING, "Invalid " + dateType + ": " + date);
-                return false;
-            }
-            return true;
-        } catch (DateTimeParseException e) {
-            numberOfCorruptedEntries++;
-            logger.log(Level.WARNING, "Invalid " + dateType + " format: " + date, e);
-            return false;
-        }
-    }
 
 
 
 
     public static boolean isDateOfBirthValid(String dateOfBirth) {
-        boolean isValid = isDateValid(dateOfBirth, 1924, LocalDate.now().getYear(), "Date of Birth");
+        boolean isValid = DateValidation.isDateValid(dateOfBirth, 1924, LocalDate.now().getYear(), "Date of Birth");
         if (!isValid) {
             numberOfCorruptedEntries++;
             logger.log(Level.WARNING, "Invalid Date of Birth: " + dateOfBirth);
@@ -87,7 +69,8 @@ public class EmployeeDataCleaner {
 
 
     public static boolean isDateOfJoiningValid(String dateOfJoining, String dateOfBirth) {
-        if (!isDateValid(dateOfJoining, 1979, LocalDate.now().getYear(), "Date of Joining")) {
+        if (!DateValidation.isDateValid(dateOfJoining, 1995, LocalDate.now().getYear(), "Date of Joining")) {
+            numberOfCorruptedEntries++;
             return false;
         }
         if (isDojAfterDob(dateOfJoining, dateOfBirth)) {
@@ -113,7 +96,7 @@ public class EmployeeDataCleaner {
     }
 
     public static boolean isDojAfterDob(String dateOfJoining, String dateOfBirth) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[MM/dd/yyyy][M/d/yyyy][M/dd/yyyy][M/d/yyyy]");
         try {
             LocalDate doj = LocalDate.parse(dateOfJoining, formatter);
             LocalDate dob = LocalDate.parse(dateOfBirth, formatter);
@@ -133,6 +116,38 @@ public class EmployeeDataCleaner {
     public static DateTimeFormatter formatDates() {
         return DateTimeFormatter.ofPattern("[MM/dd/yyyy][M/d/yyyy][M/dd/yyyy][M/d/yyyy]");
     }
+    public static LinkedHashSet<String> cleanData(LinkedHashSet<String> employeeData) {
+        LinkedHashSet<String> cleanedData = new LinkedHashSet<>();
+        for (String line : employeeData) {
+            String[] parts = line.split(",");
+            if (parts.length != 10) {
+                logger.log(Level.WARNING, "Invalid data format: " + line);
+                continue;
+            }
 
+            String empID = parts[0];
+            String prefix = parts[1];
+            String firstName = parts[2];
+            String middleInitial = parts[3];
+            String lastName = parts[4];
+            String gender = parts[5];
+            String email = parts[6];
+            String dateOfBirth = parts[7];
+            String dateOfJoining = parts[8];
+            String salary = parts[9];
+
+            if (isEmployeeIdValid(empID) &&
+                    isNameValid(firstName) &&
+                    isNameValid(lastName) &&
+                    isGenderValid(gender) &&
+                    isEmailValid(email) &&
+                    isDateOfBirthValid(dateOfBirth) &&
+                    isDateOfJoiningValid(dateOfJoining, dateOfBirth) &&
+                    isValidSalary(salary)) {
+                cleanedData.add(line);
+            }
+        }
+        return cleanedData;
+    }
 }
 
