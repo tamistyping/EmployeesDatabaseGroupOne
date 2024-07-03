@@ -11,7 +11,7 @@ public class AppLogger {
 
     public static Logger getLogger(Level fileLevel, Level consoleLevel, boolean append) {
         setupConsoleHandler(consoleLevel);
-        setupFileHandler(fileLevel, append);
+//        setupFileHandler(fileLevel, append);
 
         logger.setUseParentHandlers(false);
         logger.setLevel(fileLevel);
