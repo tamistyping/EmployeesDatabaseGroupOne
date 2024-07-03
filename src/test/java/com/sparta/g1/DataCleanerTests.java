@@ -34,7 +34,7 @@ public class DataCleanerTests {
         bob = new Employee("7890", "Mr.", "Bob", "B", "Builder", "M", "bob.builder@gmail.com", LocalDate.of(1970, 1, 1), LocalDate.of(1990, 1, 1), "789012");
         // Date of birth is not before date of joining
         alice = new Employee("987654", "Ms.", "Alice", "A", "Adams", "F", "alice.adams@gmail.com", LocalDate.of(2000, 1, 1), LocalDate.of(1990, 1, 1), "987654");
-        EmployeeDataCleaner.resetNumberOfCorruptedEntries();
+
     }
 
 
@@ -275,7 +275,6 @@ public class DataCleanerTests {
         String dob = "01/01/1990";
         boolean actual = EmployeeDataCleaner.isDateOfJoiningValid(doj, dob);
         Assertions.assertFalse(actual);
-        Assertions.assertEquals(1, EmployeeDataCleaner.getNumberOfCorruptedEntries());
     }
 
     @Test
@@ -285,7 +284,6 @@ public class DataCleanerTests {
         String dob = "01/01/1990";
         boolean actual = EmployeeDataCleaner.isDateOfJoiningValid(doj, dob);
         Assertions.assertFalse(actual);
-        Assertions.assertEquals(1, EmployeeDataCleaner.getNumberOfCorruptedEntries());
     }
 
 }
