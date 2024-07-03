@@ -1,5 +1,7 @@
 package com.sparta.g1;
 
+import com.sparta.g1.employee.Employee;
+import com.sparta.g1.utilities.DateValidation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,7 +34,7 @@ public class DataCleanerTests {
         bob = new Employee("7890", "Mr.", "Bob", "B", "Builder", "M", "bob.builder@gmail.com", LocalDate.of(1970, 1, 1), LocalDate.of(1990, 1, 1), "789012");
         // Date of birth is not before date of joining
         alice = new Employee("987654", "Ms.", "Alice", "A", "Adams", "F", "alice.adams@gmail.com", LocalDate.of(2000, 1, 1), LocalDate.of(1990, 1, 1), "987654");
-
+        EmployeeDataCleaner.resetNumberOfCorruptedEntries();
     }
 
 
@@ -82,9 +84,9 @@ public class DataCleanerTests {
     }
 
     @Test
-    public void checkDobIsBeforeDoj() {
-        boolean expected = true;
-        boolean actual = EmployeeDataCleaner.isDoJBeforeDoB(bibi);
+    public void checkDojIsBeforeDob() {
+        boolean expected = false;
+        boolean actual = EmployeeDataCleaner.isDojAfterDob("01/01/1990", "03/06/1995");
         Assertions.assertEquals(expected, actual);
     }
 
@@ -111,8 +113,8 @@ public class DataCleanerTests {
 
     @Test
     public void checkDobIsBeforeDojForAlice() {
-        boolean expected = false;
-        boolean actual = EmployeeDataCleaner.isDoJBeforeDoB(alice);
+        boolean expected = true;
+        boolean actual = EmployeeDataCleaner.isDojAfterDob("10/03/2000", "01/01/1999");
 
         Assertions.assertEquals(expected, actual);
     }
@@ -139,56 +141,151 @@ public class DataCleanerTests {
     @Test
     @DisplayName("Check Valid Date of Joining Returns True")
     void checkValidDateOfJoiningReturnsTrue() {
-        String input = "03/12/2000";
+        String doj = "03/11/2009";
+        String dob = "01/01/1990";
         Boolean expected = true;
-        boolean actual = EmployeeDataCleaner.isDateOfJoiningValid(input);
+        boolean actual = EmployeeDataCleaner.isDateOfJoiningValid(doj, dob);
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     @DisplayName("Check Invalid Date of Joining Returns False")
     void checkInvalidDateOfJoiningReturnsFalse() {
-        String input = "03/12/2025";
+        String doj = "03/12/2025";
+        String dob = "01/01/1955";
         Boolean expected = false;
-        boolean actual = EmployeeDataCleaner.isDateOfJoiningValid(input);
+        boolean actual = EmployeeDataCleaner.isDateOfJoiningValid(doj, dob);
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     @DisplayName("Check Invalid Day Of Month On Leap Year Returns False")
     void checkInvalidDayOfMonthOnLeapYearReturnsFalse() {
-        String input = "02/30/2020";
+        int month = 2;
+        int day = 30;
+        int year = 2020;
         Boolean expected = false;
-        boolean actual = EmployeeDataCleaner.isDateOfJoiningValid(input);
+        boolean actual = DateValidation.isValidDayOfMonth(month, day, year);
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     @DisplayName("check Invalid Day Of Month Returns False For 30 Day Month")
     void checkInvalidDayOfMonthReturnsFalseFor30DayMonth() {
-        String input = "4/31/2020";
+        String doj = "4/31/2020";
+        String dob = "01/01/1955";
         Boolean expected = false;
-        boolean actual = EmployeeDataCleaner.isDateOfJoiningValid(input);
+        boolean actual = EmployeeDataCleaner.isDateOfJoiningValid(doj, dob);
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     @DisplayName("check Valid Day Of Month On Leap Year Returns True")
-    void checkValidDayOfMonthOnLeapYearReturnsTrue() {
-        String input = "02/29/2020";
+    void checkValidDayOfMonthOnLeapYearReturnsTrue() {;
         Boolean expected = true;
-        boolean actual = EmployeeDataCleaner.isDateOfJoiningValid(input);
+        Boolean actual = DateValidation.isValidDayOfMonth(2,29,2020);
         Assertions.assertEquals(expected, actual);
 
     }
 
     @Test
-    @DisplayName("check Valid Day Of Month Returns True For 30 Day Month")
+    @DisplayName("Check Valid Day Of Month Returns True For 30 Day Month")
     void checkValidDayOfMonthReturnsTrueFor30DayMonth() {
-        String input = "04/30/2020";
+        String doj = "04/30/2020";
+        String dob = "01/01/1955";
         Boolean expected = true;
-        boolean actual = EmployeeDataCleaner.isDateOfJoiningValid(input);
+        boolean actual = EmployeeDataCleaner.isDateOfJoiningValid(doj, dob);
         Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("Check if date of joining before date of birth returns false")
+    void checkIfDateOfJoiningBeforeDateOfBirthReturnsFalse() {
+        boolean expected = false;
+        boolean actual = EmployeeDataCleaner.isDojAfterDob("10/10/1999", "01/01/2010");
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("Check if date of joining after date of birth returns true")
+    void checkIfDateOfJoiningAfterDateOfBirthReturnsTrue() {
+        boolean expected = true;
+        boolean actual = EmployeeDataCleaner.isDojAfterDob("01/05/2020", "10/10/2004");
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("Check Valid Name Returns True")
+    void checkValidNameReturnsTrue() {
+        String name = "Howard-Jones";
+        Boolean expected = true;
+        boolean actual = EmployeeDataCleaner.isNameValid(name);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("Check Name with Invalid Characters Returns False")
+    void checkNameWithInvalidCharactersReturnsFalse() {
+        String name = "Lew$s";
+        Boolean expected = false;
+        boolean actual = EmployeeDataCleaner.isNameValid(name);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("Check Name with numbers Returns False")
+    void checkNameWithNumbersReturnsFalse() {
+        String name = "Lewis33";
+        Boolean expected = false;
+        boolean actual = EmployeeDataCleaner.isNameValid(name);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("Check Date of Joining is Before Date of Birth")
+    void checkDobBeforeDojReturnsTrue() {
+        String doj = "03/11/2009";
+        String dob = "01/01/1990";
+        boolean actual = EmployeeDataCleaner.isDojAfterDob(doj, dob);
+        Assertions.assertTrue(actual);
+    }
+
+    @Test
+    @DisplayName("Check Date of Joining is Same as Date of Birth Returns False")
+    void checkDobBeforeDojReturnsFalseForSameDates() {
+        String doj = "01/01/1990";
+        String dob = "01/01/1990";
+        boolean actual = EmployeeDataCleaner.isDojAfterDob(doj, dob);
+        Assertions.assertFalse(actual);
+    }
+
+    @Test
+    @DisplayName("Check Date of Joining is After Date of Birth Returns False")
+    void checkDobBeforeDojReturnsFalseForDojAfterDob() {
+        String doj = "01/01/1990";
+        String dob = "03/11/2009";
+        boolean actual = EmployeeDataCleaner.isDojAfterDob(doj, dob);
+        Assertions.assertFalse(actual);
+    }
+
+    @Test
+    @DisplayName("Check Date of Joining Same as Date of Birth Returns False")
+    void checkInvalidDateOfJoiningSameAsDobReturnsFalse() {
+        String doj = "01/01/1990";
+        String dob = "01/01/1990";
+        boolean actual = EmployeeDataCleaner.isDateOfJoiningValid(doj, dob);
+        Assertions.assertFalse(actual);
+        Assertions.assertEquals(1, EmployeeDataCleaner.getNumberOfCorruptedEntries());
+    }
+
+    @Test
+    @DisplayName("Check Date of Joining Before Date of Birth Returns False")
+    void checkInvalidDateOfJoiningBeforeDobReturnsFalse() {
+        String doj = "01/01/1980";
+        String dob = "01/01/1990";
+        boolean actual = EmployeeDataCleaner.isDateOfJoiningValid(doj, dob);
+        Assertions.assertFalse(actual);
+        Assertions.assertEquals(1, EmployeeDataCleaner.getNumberOfCorruptedEntries());
     }
 
 }
