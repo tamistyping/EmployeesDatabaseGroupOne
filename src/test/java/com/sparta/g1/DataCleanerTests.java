@@ -4,13 +4,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.platform.engine.reporting.ReportEntry;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class DataSanitisationTests {
+public class DataCleanerTests {
     private Employee bibi;
     private Employee eric;
     private Employee Renetta;
@@ -44,7 +43,7 @@ public class DataSanitisationTests {
         boolean expected = false;
 
         //Act
-        boolean actual = DataSanitisation.isValidSalary("-100000");
+        boolean actual = EmployeeDataCleaner.isValidSalary("-100000");
 
         //Assert
         Assertions.assertEquals(expected, actual);
@@ -55,21 +54,21 @@ public class DataSanitisationTests {
     public void checkIsValidEmailReturnsTrueOnValidEmailInput() {
         String input = "email@email.com";
         boolean expected = true;
-        boolean actual = DataSanitisation.isValidEmail(input);
+        boolean actual = EmployeeDataCleaner.isEmailValid(input);
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void checkIdIsValidLength() {
         boolean expected = true;
-        boolean actual = DataSanitisation.checkEmpIdIsCorrectLength(bibi.empId());
+        boolean actual = EmployeeDataCleaner.isEmployeeIdValid(bibi.empId());
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void checkValidGender() {
         boolean expected = true;
-        boolean actual = DataSanitisation.checkValidGender(bibi.gender());
+        boolean actual = EmployeeDataCleaner.isGenderValid(bibi.gender());
 
         Assertions.assertEquals(expected, actual);
     }
@@ -77,7 +76,7 @@ public class DataSanitisationTests {
     @Test
     public void isValidEmail() {
         boolean expected = true;
-        boolean actual = DataSanitisation.isValidEmail(bibi.email());
+        boolean actual = EmployeeDataCleaner.isEmailValid(bibi.email());
 
         Assertions.assertEquals(expected, actual);
     }
@@ -85,35 +84,35 @@ public class DataSanitisationTests {
     @Test
     public void checkDobIsBeforeDoj() {
         boolean expected = true;
-        boolean actual = DataSanitisation.checkDobIsBeforeDoj(bibi);
+        boolean actual = EmployeeDataCleaner.isDoJBeforeDoB(bibi);
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void checkValidGenderForJohn() {
         boolean expected = false;
-        boolean actual = DataSanitisation.checkValidGender(john.gender());
+        boolean actual = EmployeeDataCleaner.isGenderValid(john.gender());
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void isValidEmailForJane() {
         boolean expected = false;
-        boolean actual = DataSanitisation.isValidEmail(jane.email());
+        boolean actual = EmployeeDataCleaner.isEmailValid(jane.email());
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void checkEmpIdIsCorrectLengthForBob() {
         boolean expected = false;
-        boolean actual = DataSanitisation.checkEmpIdIsCorrectLength(bob.empId());
+        boolean actual = EmployeeDataCleaner.isEmployeeIdValid(bob.empId());
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void checkDobIsBeforeDojForAlice() {
         boolean expected = false;
-        boolean actual = DataSanitisation.checkDobIsBeforeDoj(alice);
+        boolean actual = EmployeeDataCleaner.isDoJBeforeDoB(alice);
 
         Assertions.assertEquals(expected, actual);
     }
@@ -123,7 +122,7 @@ public class DataSanitisationTests {
     void checkValidDateOfBirthReturnsTrue() {
         String input = "03/12/1970";
         Boolean expected = true;
-        boolean actual = DataSanitisation.isDateOfBirthValid(input);
+        boolean actual = EmployeeDataCleaner.isDateOfBirthValid(input);
         Assertions.assertEquals(expected, actual);
     }
 
@@ -132,7 +131,7 @@ public class DataSanitisationTests {
     void checkInvalidDateOfBirthReturnsFalse() {
         String input = "03/12/1000";
         Boolean expected = false;
-        boolean actual = DataSanitisation.isDateOfBirthValid(input);
+        boolean actual = EmployeeDataCleaner.isDateOfBirthValid(input);
         Assertions.assertEquals(expected, actual);
     }
 
@@ -142,7 +141,7 @@ public class DataSanitisationTests {
     void checkValidDateOfJoiningReturnsTrue() {
         String input = "03/12/2000";
         Boolean expected = true;
-        boolean actual = DataSanitisation.isDateOfJoiningValid(input);
+        boolean actual = EmployeeDataCleaner.isDateOfJoiningValid(input);
         Assertions.assertEquals(expected, actual);
     }
 
@@ -151,7 +150,7 @@ public class DataSanitisationTests {
     void checkInvalidDateOfJoiningReturnsFalse() {
         String input = "03/12/2025";
         Boolean expected = false;
-        boolean actual = DataSanitisation.isDateOfJoiningValid(input);
+        boolean actual = EmployeeDataCleaner.isDateOfJoiningValid(input);
         Assertions.assertEquals(expected, actual);
     }
 
@@ -160,7 +159,7 @@ public class DataSanitisationTests {
     void checkInvalidDayOfMonthOnLeapYearReturnsFalse() {
         String input = "02/30/2020";
         Boolean expected = false;
-        boolean actual = DataSanitisation.isDateOfJoiningValid(input);
+        boolean actual = EmployeeDataCleaner.isDateOfJoiningValid(input);
         Assertions.assertEquals(expected, actual);
     }
 
@@ -169,7 +168,7 @@ public class DataSanitisationTests {
     void checkInvalidDayOfMonthReturnsFalseFor30DayMonth() {
         String input = "4/31/2020";
         Boolean expected = false;
-        boolean actual = DataSanitisation.isDateOfJoiningValid(input);
+        boolean actual = EmployeeDataCleaner.isDateOfJoiningValid(input);
         Assertions.assertEquals(expected, actual);
     }
 
@@ -178,7 +177,7 @@ public class DataSanitisationTests {
     void checkValidDayOfMonthOnLeapYearReturnsTrue() {
         String input = "02/29/2020";
         Boolean expected = true;
-        boolean actual = DataSanitisation.isDateOfJoiningValid(input);
+        boolean actual = EmployeeDataCleaner.isDateOfJoiningValid(input);
         Assertions.assertEquals(expected, actual);
 
     }
@@ -188,7 +187,7 @@ public class DataSanitisationTests {
     void checkValidDayOfMonthReturnsTrueFor30DayMonth() {
         String input = "04/30/2020";
         Boolean expected = true;
-        boolean actual = DataSanitisation.isDateOfJoiningValid(input);
+        boolean actual = EmployeeDataCleaner.isDateOfJoiningValid(input);
         Assertions.assertEquals(expected, actual);
     }
 
