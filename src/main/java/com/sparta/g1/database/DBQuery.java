@@ -40,5 +40,23 @@ public class DBQuery implements DatabaseQueries {
             e.printStackTrace();
         }
     }
+    public static void getEmployeeByMinimumSalary(String employeeSalary) {
+        try {
+            ResultSet query = DBUtility.executePreparedStatementQuery(
+                    connection, DatabaseQueries.MIN_SALARY, employeeSalary);
+            DBUtility.printResultSet(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void getEmployeeByMaximumSalary(String employeeSalary) {
+        try {
+            ResultSet query = DBUtility.executePreparedStatementQuery(
+                    connection, DatabaseQueries.MAX_SALARY, employeeSalary);
+            DBUtility.printResultSet(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
