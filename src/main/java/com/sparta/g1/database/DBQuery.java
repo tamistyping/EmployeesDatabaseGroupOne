@@ -114,5 +114,14 @@ public class DBQuery implements DatabaseQueries {
             e.printStackTrace();
         }
     }
+    public static void addEmployee(String employeeId, String prefix, String firstName, String middleInitial,
+                                   String lastName, String gender, String email, String dateOfBirth, String startDate, String salary) {
+        if (middleInitial == "" || middleInitial == null) {
+            middleInitial = null;
+        }
+        DBUtility.executePreparedStatementUpdate(
+                connection, DatabaseQueries.INSERT_EMPLOYEE, employeeId, prefix, firstName, middleInitial, lastName, gender, email, dateOfBirth, startDate, salary);
+
+    }
 
 }
