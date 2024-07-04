@@ -24,5 +24,21 @@ public class DBQuery implements DatabaseQueries {
             e.printStackTrace();
         }
     }
+    public static void getEmployeeByGender(String employeeGender) {
+        String searchParameter = "";
+        employeeGender = employeeGender.toLowerCase();
+        if (employeeGender == "male" || employeeGender == "m") {
+            searchParameter = "M";
+        } else if (employeeGender == "female" || employeeGender == "f") {
+            searchParameter = "F";
+        }
+        try {
+            ResultSet query = DBUtility.executePreparedStatementQuery(
+                    connection, DatabaseQueries.GENDER_SEARCH, searchParameter);
+            DBUtility.printResultSet(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
