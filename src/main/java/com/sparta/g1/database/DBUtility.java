@@ -1,6 +1,7 @@
 package com.sparta.g1.database;
 
 import com.sparta.g1.EmployeeDataCleaner;
+import com.sparta.g1.EmployeeFactory;
 
 import java.sql.*;
 import java.util.List;
@@ -66,6 +67,13 @@ public class DBUtility {
         Connection connection = DBConnection.getInstance().getConnection();
         executePreparedStatementUpdate(connection, insertCreateTableSQL);
 
+    }
+
+    public static void tableInit() {
+        Connection connection = DBConnection.getInstance().getConnection();
+        dropTable();
+        createEmployeeTable();
+        insertEmployeeIntoDatabase(connection, EmployeeFactory.getEmployees());
     }
 
     public static void insertEmployeeIntoDatabase(Connection connection, Set<String> employees) {

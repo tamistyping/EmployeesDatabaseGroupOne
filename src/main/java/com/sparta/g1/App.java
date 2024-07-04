@@ -10,9 +10,8 @@ public class App {
     public static Connection connection = DBConnection.getInstance().getConnection();
 
     public static void main(String[] args) {
-        DBUtility.dropTable();
-        DBUtility.createEmployeeTable();
-        DBUtility.insertEmployeeIntoDatabase(connection, EmployeeFactory.getEmployees());
+
+        //DBUtility.tableInit();
 
         try {
             ResultSet query = DBUtility.executePreparedStatementQuery(connection, DatabaseQueries.ID_SEARCH, "121372");
