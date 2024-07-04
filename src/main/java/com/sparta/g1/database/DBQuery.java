@@ -101,5 +101,18 @@ public class DBQuery implements DatabaseQueries {
             e.printStackTrace();
         }
     }
+    public static void getEmployeesBornBefore(String birthday) {
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("[dd/MM/yyyy][d/M/yyyy][dd/M/yyyy][d/M/yyyy]");
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(birthday, inputFormatter);
+        birthday = date.format(outputFormatter);
+        try {
+            ResultSet query = DBUtility.executePreparedStatementQuery(
+                    connection, DatabaseQueries.EMPLOYEES_BORN_BEFORE, birthday);
+            DBUtility.printResultSet(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
