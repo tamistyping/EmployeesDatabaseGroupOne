@@ -10,8 +10,15 @@ public class DBConnection {
 
     private DBConnection() {
         try {
-            connection = DriverManager.getConnection(DBProperties.getConnectionProperty("url"), DBProperties.getConnectionProperty("username"), DBProperties.getConnectionProperty("password"));
+            String url = DBProperties.getConnectionProperty("url");
+            String username = DBProperties.getConnectionProperty("username");
+            String password = DBProperties.getConnectionProperty("password");
+
+            System.out.println("Connecting to database...");
+            connection = DriverManager.getConnection(url, username, password);
+            System.out.println("Connection successful.");
         } catch (SQLException e) {
+            System.err.println("Failed to connect to database:");
             e.printStackTrace();
         }
     }
@@ -30,5 +37,4 @@ public class DBConnection {
     public Connection getConnection() {
         return connection;
     }
-
 }
