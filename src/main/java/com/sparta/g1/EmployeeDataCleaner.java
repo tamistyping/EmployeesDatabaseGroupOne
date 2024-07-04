@@ -3,9 +3,12 @@ package com.sparta.g1;
 import com.sparta.g1.logger.AppLogger;
 import com.sparta.g1.utilities.DateValidation;
 
+import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.logging.Level;
@@ -16,22 +19,35 @@ public class EmployeeDataCleaner {
     private static final Logger logger = AppLogger.getLogger(Level.ALL, Level.SEVERE, false);
 
     private static int numberOfCorruptedEntries = 0;
+    private static Set<String> employeeIds = new HashSet<>();
 
     public static boolean isEmployeeIdValid(String empId) {
         if (empId.matches("\\d{6}")) {
-            return true;
+            if (employeeIds.contains(empId)) {
+                numberOfCorruptedEntries++;
+                logger.log(Level.WARNING, "Duplicate Employee ID: " + empId);
+                return false;
+            } else {
+                employeeIds.add(empId);
+                return true;
+            }
         } else {
             numberOfCorruptedEntries++;
-            logger.log(Level.WARNING, "Invalid Employee ID: " + empId);
+            logger.log(Level.WARNING, "Invalid Employee ID format: " + empId);
             return false;
         }
     }
+
 
     public static void isPrefixValid(String prefix) {
     }
     public static boolean isNameValid(String name) {
         String nameRegex = "^[a-zA-Z\\-]+$";
-        return name.matches(nameRegex);
+        if (name.matches(nameRegex)) {
+            return true;
+        }
+        numberOfCorruptedEntries++;
+        return false;
     }
     public static boolean isGenderValid(String gender) {
         if (gender.equals("M") || gender.equals("F")) {
@@ -140,7 +156,31 @@ public class EmployeeDataCleaner {
                 cleanedData.add(line);
             }
         }
+
         return cleanedData;
     }
+
+    public static Object convertToDataType(String value, String dataType) {
+        switch (dataType.toLowerCase()) {
+            case "date":
+                try {
+                    DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("[MM/dd/yyyy][M/d/yyyy][M/dd/yyyy][M/d/yyyy]");
+                    DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    LocalDate date = LocalDate.parse(value, inputFormatter);
+                    return date.format(outputFormatter);
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalArgumentException("Invalid date format for value: " + value + ". Expected format: YYYY-MM-DD", e);
+                }
+            case "char":
+                if (value.length() == 1) {
+                    return value.charAt(0);
+                } else {
+                    throw new IllegalArgumentException("Invalid char format for value: " + value + ". Expected single character.");
+                }
+            default:
+                return value;
+        }
+    }
+
 }
 

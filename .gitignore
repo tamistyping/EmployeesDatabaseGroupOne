@@ -41,5 +41,10 @@ build/
 ### Mac OS ###
 .DS_Store
 
+<<<<<<< HEAD
 *mysql*
 /src/main/resources/mysql.properties
+=======
+
+*mysql*
+>>>>>>> feature-lewis

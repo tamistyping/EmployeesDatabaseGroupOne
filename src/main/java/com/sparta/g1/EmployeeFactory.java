@@ -18,10 +18,8 @@ public class EmployeeFactory {
             while ((employeeLine = f.readLine()) != null) {
                 result.add(employeeLine);
             }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
         int count = 0;
@@ -34,6 +32,6 @@ public class EmployeeFactory {
 
         logger.log(Level.INFO, "Number of cleaned entries: " + count);
 
-        return result;
+        return cleanedResult;
     }
 }
