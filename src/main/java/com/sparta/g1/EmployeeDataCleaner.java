@@ -3,8 +3,6 @@ package com.sparta.g1;
 import com.sparta.g1.logger.AppLogger;
 import com.sparta.g1.utilities.DateValidation;
 
-import java.sql.Date;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -79,7 +77,7 @@ public class EmployeeDataCleaner {
 
     public static boolean isDateOfJoiningValid(String dateOfJoining, String dateOfBirth) {
         if (!DateValidation.isDateValid(dateOfJoining, 1995, LocalDate.now().getYear(), "Date of Joining")) {
-            logger.log(Level.INFO, "Broke");
+            logger.log(Level.INFO, "Date of Joining is before company was founded or in the future");
             numberOfCorruptedEntries++;
             return false;
         }
