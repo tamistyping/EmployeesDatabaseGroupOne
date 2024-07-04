@@ -35,7 +35,7 @@ public class CsvReader {
             e.printStackTrace();
         }
 
-        LinkedHashSet<String> cleanedData = EmployeeDataCleaner.cleanData(employeeData);
+        //LinkedHashSet<String> cleanedData = EmployeeDataCleaner.cleanData(employeeData);
 
         for (String data : employeeData) {
             System.out.println(data);

@@ -14,6 +14,7 @@ public class EmployeeFactory {
             }
         }
 
+        EmployeeDataCleaner.cleanData(result);
         return result;
     }
 }
