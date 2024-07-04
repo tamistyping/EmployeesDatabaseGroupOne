@@ -76,5 +76,14 @@ public class DBQuery implements DatabaseQueries {
             e.printStackTrace();
         }
     }
+    public static void getAverageEmployeeSalary() {
+        try {
+            ResultSet query = DBUtility.executePreparedStatementQuery(
+                    connection, DatabaseQueries.AVERAGE_SALARY);
+            DBUtility.printResultSet(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
