@@ -115,7 +115,7 @@ public class DBUtility {
     public static void printResultSet(ResultSet resultSet) throws SQLException {
         ResultSetMetaData metaData = resultSet.getMetaData();
         int columnCount = metaData.getColumnCount();
-
+        System.out.println();
         for (int i = 1; i <= columnCount; i++) {
             if (i > 1) System.out.print(" || ");
             System.out.print(metaData.getColumnLabel(i));
