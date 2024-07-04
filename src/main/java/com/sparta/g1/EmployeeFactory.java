@@ -8,11 +8,10 @@ import java.util.logging.Logger;
 
 public class EmployeeFactory {
 
-    private static final Logger logger = AppLogger.getLogger(Level.ALL, Level.SEVERE, false);
+    private static final Logger logger = AppLogger.getLogger(Level.OFF, Level.SEVERE, false);
 
     public static Set<String> getEmployees(String path){
         Set<String> result = new HashSet<>();
-
         try (BufferedReader f = new BufferedReader(new FileReader(path))) {
             String employeeLine;
             while ((employeeLine = f.readLine()) != null) {
@@ -26,16 +25,11 @@ public class EmployeeFactory {
                     result.add(employeeLine);
                 }
             } catch (IOException ex) {
-                throw new RuntimeException(ex);
+                logger.log(Level.SEVERE, "IOException thrown when reading default path employees.csv" +
+                        " - it is likely that src/main/resources/employees.csv is wrong or missing");
             }
-            logger.log(Level.SEVERE, "Exception thrown when reading employees.csv");
+            logger.log(Level.SEVERE, "IOException thrown when reading employees.csv");
         }
-
-        Set<String> cleanedResult = EmployeeDataCleaner.cleanData(result);
-        for (String data : cleanedResult) {
-            logger.log(Level.INFO, "Cleaned Data: " + data);
-        }
-
-        return cleanedResult;
+        return EmployeeDataCleaner.cleanData(result);
     }
 }
