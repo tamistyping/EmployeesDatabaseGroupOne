@@ -58,5 +58,14 @@ public class DBQuery implements DatabaseQueries {
             e.printStackTrace();
         }
     }
+    public static void getAllEmployees() {
+        try {
+            ResultSet query = DBUtility.executePreparedStatementQuery(
+                    connection, DatabaseQueries.ALL_EMPLOYEES);
+            DBUtility.printResultSet(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
