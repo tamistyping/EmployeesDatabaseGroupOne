@@ -61,6 +61,15 @@ public class DataCleanerTests {
     }
 
     @Test
+    @DisplayName("Check if invalid email string returns false")
+    public void checkIfInvalidEmailReturnsFalse() {
+        String input = ".@email.com.@email.com";
+        boolean expected = false;
+        boolean actual = EmployeeDataCleaner.isEmailValid(input);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
     public void checkIdIsValidLength() {
         boolean expected = true;
         boolean actual = EmployeeDataCleaner.isEmployeeIdValid(bibi.empId());
