@@ -43,7 +43,11 @@ public class EmployeeDataCleaner {
     }
     public static boolean isNameValid(String name) {
         String nameRegex = "^[a-zA-Z\\-]+$";
-        return name.matches(nameRegex);
+        if (name.matches(nameRegex)) {
+            return true;
+        }
+        numberOfCorruptedEntries++;
+        return false;
     }
     public static boolean isGenderValid(String gender) {
         if (gender.equals("M") || gender.equals("F")) {
