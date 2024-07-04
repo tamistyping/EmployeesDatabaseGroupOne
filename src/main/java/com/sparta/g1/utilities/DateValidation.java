@@ -8,6 +8,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static java.time.format.ResolverStyle.STRICT;
 
 public class DateValidation {
 
@@ -31,10 +32,10 @@ public class DateValidation {
     public static boolean isDateValid(String date, int minYear, int maxYear, String dateType) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[MM/dd/yyyy][M/d/yyyy][M/dd/yyyy][M/d/yyyy]");
-            LocalDate parsedDate = LocalDate.parse(date, formatter);
+            LocalDate parsedDate = LocalDate.parse(date, formatter.withResolverStyle(STRICT));
+            int year = parsedDate.getYear();
             int month = parsedDate.getMonthValue();
             int day = parsedDate.getDayOfMonth();
-            int year = parsedDate.getYear();
 
             if (year < minYear || year > maxYear || !isValidDayOfMonth(month, day, year)) {
                 logger.log(Level.WARNING, "Invalid " + dateType + ": " + date);
