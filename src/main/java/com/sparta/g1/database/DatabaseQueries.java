@@ -12,6 +12,6 @@ public interface DatabaseQueries {
     String DELETE_EMPLOYEE = "DELETE FROM EmployeeData WHERE empId = ?";
     String COUNT_EMPLOYEES = "SELECT COUNT(*) FROM EmployeeData";
     String AVERAGE_SALARY = "SELECT AVG(salary) FROM EmployeeData";
-    String EMPLOYEES_JOINED_AFTER = "SELECT * FROM EmployeeData WHERE dateOfJoining > ?";
+    String EMPLOYEES_JOINED_AFTER = "SELECT * FROM EmployeeData WHERE dateOfJoining >= ?";
     String EMPLOYEES_BORN_BEFORE = "SELECT * FROM EmployeeData WHERE dateOfBirth < ?";
 }
