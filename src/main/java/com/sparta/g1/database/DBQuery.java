@@ -2,6 +2,9 @@ package com.sparta.g1.database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import static com.sparta.g1.App.connection;
 
 public class DBQuery implements DatabaseQueries {
@@ -80,6 +83,19 @@ public class DBQuery implements DatabaseQueries {
         try {
             ResultSet query = DBUtility.executePreparedStatementQuery(
                     connection, DatabaseQueries.AVERAGE_SALARY);
+            DBUtility.printResultSet(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void getEmployeesWhoJoinedAfter(String startDate) {
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("[dd/MM/yyyy][d/M/yyyy][dd/M/yyyy][d/M/yyyy]");
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(startDate, inputFormatter);
+        startDate = date.format(outputFormatter);
+        try {
+            ResultSet query = DBUtility.executePreparedStatementQuery(
+                    connection, DatabaseQueries.EMPLOYEES_JOINED_AFTER, startDate);
             DBUtility.printResultSet(query);
         } catch (SQLException e) {
             e.printStackTrace();
