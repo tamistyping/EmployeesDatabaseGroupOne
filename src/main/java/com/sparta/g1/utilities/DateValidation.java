@@ -46,8 +46,6 @@ public class DateValidation {
             return true;
         } catch (DateTimeParseException e) {
             logger.log(Level.WARNING, "Invalid " + dateType + " format: " + date, e);
-            logger.log(Level.INFO, "Broke");
-
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[MM/dd/yyyy][M/d/yyyy][M/dd/yyyy][M/d/yyyy]");
             LocalDate parsedDate = LocalDate.parse(date, formatter.withResolverStyle(STRICT));
             logger.log(Level.INFO, String.valueOf(parsedDate));

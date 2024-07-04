@@ -16,7 +16,7 @@ public class EmployeeDataCleaner {
 
     private static final Logger logger = AppLogger.getLogger(Level.ALL, Level.SEVERE, false);
 
-    private static int numberOfCorruptedEntries = 0;
+    private static int numberOfCorruptedEntries;
     private static Set<String> employeeIds = new HashSet<>();
 
     public static boolean isEmployeeIdValid(String empId) {
@@ -36,14 +36,12 @@ public class EmployeeDataCleaner {
         }
     }
 
-
-    public static void isPrefixValid(String prefix) {
-    }
     public static boolean isNameValid(String name) {
         String nameRegex = "^[a-zA-Z\\-]+$";
         if (name.matches(nameRegex)) {
             return true;
         }
+        logger.log(Level.WARNING, "Invalid name: " + name);
         numberOfCorruptedEntries++;
         return false;
     }
@@ -119,10 +117,6 @@ public class EmployeeDataCleaner {
         return numberOfCorruptedEntries;
     }
 
-    public static DateTimeFormatter formatDates() {
-        return DateTimeFormatter.ofPattern("[MM/dd/yyyy][M/d/yyyy][M/dd/yyyy][M/d/yyyy]");
-    }
-
     public static Set<String> cleanData(Set<String> employeeData) {
         LinkedHashSet<String> cleanedData = new LinkedHashSet<>();
         for (String line : employeeData) {
@@ -167,6 +161,7 @@ public class EmployeeDataCleaner {
                     LocalDate date = LocalDate.parse(value, inputFormatter);
                     return date.format(outputFormatter);
                 } catch (IllegalArgumentException e) {
+
                     throw new IllegalArgumentException("Invalid date format for value: " + value + ". Expected format: YYYY-MM-DD", e);
                 }
             case "char":

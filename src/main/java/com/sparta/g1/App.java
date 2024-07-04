@@ -13,5 +13,7 @@ public class App {
         DBQuery.getEmployeeByName("ren");
 
         DBConnection.getInstance().closeConnection();
+
+        System.out.println(EmployeeDataCleaner.getNumberOfCorruptedEntries());
     }
 }
