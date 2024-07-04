@@ -8,13 +8,17 @@ import java.util.logging.Logger;
 public class AppLogger {
 
     private static final Logger logger = Logger.getLogger(AppLogger.class.getName());
+    private static boolean handlersSet = false;
 
     public static Logger getLogger(Level fileLevel, Level consoleLevel, boolean append) {
-        setupConsoleHandler(consoleLevel);
-        setupFileHandler(fileLevel, append);
+        if (!handlersSet) {
+            setupConsoleHandler(consoleLevel);
+            setupFileHandler(fileLevel, append);
+            handlersSet = true;
+        }
 
         logger.setUseParentHandlers(false);
-        logger.setLevel(fileLevel);
+        logger.setLevel(Level.ALL); // Ensure the logger accepts all levels
 
         return logger;
     }
@@ -25,11 +29,10 @@ public class AppLogger {
             fileHandler.setLevel(level);
             fileHandler.setFormatter(new CustomFormatter());
             logger.addHandler(fileHandler);
-        } catch(Exception e) {
-            logger.log(Level.SEVERE, "Exception when setting up file handler");
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Exception when setting up file handler", e);
             throw new RuntimeException(e);
         }
-
     }
 
     private static void setupConsoleHandler(Level level) {
@@ -38,5 +41,4 @@ public class AppLogger {
         consoleHandler.setFormatter(new CustomFormatter());
         logger.addHandler(consoleHandler);
     }
-
 }
