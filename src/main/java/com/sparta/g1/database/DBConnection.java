@@ -37,4 +37,17 @@ public class DBConnection {
     public Connection getConnection() {
         return connection;
     }
+
+    public void closeConnection() {
+        if (connection != null) {
+            try {
+                connection.close();
+                System.out.println("Connection closed.");
+            } catch (SQLException e) {
+                System.err.println("Failed to close the connection:");
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
