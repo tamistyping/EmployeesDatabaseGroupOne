@@ -5,13 +5,10 @@ import com.sparta.g1.logger.AppLogger;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static java.time.format.ResolverStyle.STRICT;
 
 public class DateValidation {
 
-    private static final Logger logger = AppLogger.getLogger(Level.ALL, Level.SEVERE, false);
 
     public static boolean isValidDayOfMonth(int month, int day, int year) {
         if (month < 1 || month > 12 || day < 1) {
@@ -40,15 +37,12 @@ public class DateValidation {
 
 
             if (year < minYear || year > maxYear || !isValidDayOfMonth(month, day, year)) {
-                logger.log(Level.WARNING, "Invalid " + dateType + ": " + date);
                 return false;
             }
             return true;
         } catch (DateTimeParseException e) {
-            logger.log(Level.WARNING, "Invalid " + dateType + " format: " + date, e);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[MM/dd/yyyy][M/d/yyyy][M/dd/yyyy][M/d/yyyy]");
             LocalDate parsedDate = LocalDate.parse(date, formatter.withResolverStyle(STRICT));
-            logger.log(Level.INFO, String.valueOf(parsedDate));
             return false;
         }
     }
