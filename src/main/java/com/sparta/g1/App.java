@@ -9,7 +9,12 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class App {
+    public static Connection connection = DBConnection.getInstance().getConnection();
+
     public static void main(String[] args) {
-        DBUtility.insertEmployeeIntoDatabase(EmployeeFactory.getEmployees());
+        DBUtility.dropTable();
+        DBUtility.createEmployeeTable();
+        DBUtility.insertEmployeeIntoDatabase(connection, EmployeeFactory.getEmployees());
+        DBConnection.getInstance().closeConnection();
     }
 }
