@@ -75,8 +75,7 @@ public class DBUtility {
         }
     }
 
-    public static void tableInit() {
-        Connection connection = DBConnection.getInstance().getConnection();
+    public static void tableInit(Connection connection) {
         try {
             if (!doesTableExist(connection, "EmployeeData")) {
                 createEmployeeTable();

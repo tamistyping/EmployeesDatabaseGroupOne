@@ -11,10 +11,11 @@ public class App {
 
     public static void main(String[] args) {
 
-        DBUtility.tableInit();
+        DBUtility.tableInit(connection);
 
         try {
-            ResultSet query = DBUtility.executePreparedStatementQuery(connection, DatabaseQueries.ID_SEARCH, "121372");
+            ResultSet query = DBUtility.executePreparedStatementQuery(
+                    connection, DatabaseQueries.NAME_SEARCH, "Cl%");
             DBUtility.printResultSet(query);
         } catch (SQLException e) {
             e.printStackTrace();
