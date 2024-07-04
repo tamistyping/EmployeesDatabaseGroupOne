@@ -7,12 +7,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class EmployeeDataCleaner {
 
-    private static final Logger logger = AppLogger.getLogger(Level.ALL, Level.INFO, false);
+    private static final Logger logger = AppLogger.getLogger(Level.ALL, Level.SEVERE, false);
 
     private static int numberOfCorruptedEntries = 0;
 
@@ -108,7 +109,7 @@ public class EmployeeDataCleaner {
         return DateTimeFormatter.ofPattern("[MM/dd/yyyy][M/d/yyyy][M/dd/yyyy][M/d/yyyy]");
     }
 
-    public static LinkedHashSet<String> cleanData(LinkedHashSet<String> employeeData) {
+    public static Set<String> cleanData(Set<String> employeeData) {
         LinkedHashSet<String> cleanedData = new LinkedHashSet<>();
         for (String line : employeeData) {
             String[] parts = line.split(",");
