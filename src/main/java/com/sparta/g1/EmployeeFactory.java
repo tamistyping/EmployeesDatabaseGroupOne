@@ -10,27 +10,31 @@ public class EmployeeFactory {
 
     private static final Logger logger = AppLogger.getLogger(Level.ALL, Level.SEVERE, false);
 
-    public static Set<String> getEmployees(){
+    public static Set<String> getEmployees(String path){
         Set<String> result = new HashSet<>();
 
-        try (BufferedReader f = new BufferedReader(new FileReader("src/main/resources/employees.csv"))) {
+        try (BufferedReader f = new BufferedReader(new FileReader(path))) {
             String employeeLine;
             while ((employeeLine = f.readLine()) != null) {
                 result.add(employeeLine);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            try {
+                BufferedReader f = new BufferedReader(new FileReader("src/main/resources/employees.csv"));
+                String employeeLine;
+                while ((employeeLine = f.readLine()) != null) {
+                    result.add(employeeLine);
+                }
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            logger.log(Level.SEVERE, "Exception thrown when reading employees.csv");
         }
-
-        int count = 0;
 
         Set<String> cleanedResult = EmployeeDataCleaner.cleanData(result);
         for (String data : cleanedResult) {
             logger.log(Level.INFO, "Cleaned Data: " + data);
-            count++;
         }
-
-        logger.log(Level.INFO, "Number of cleaned entries: " + count);
 
         return cleanedResult;
     }

@@ -11,7 +11,7 @@ public class App {
 
     public static void main(String[] args) {
 
-        //DBUtility.tableInit();
+        DBUtility.tableInit();
 
         try {
             ResultSet query = DBUtility.executePreparedStatementQuery(connection, DatabaseQueries.ID_SEARCH, "121372");

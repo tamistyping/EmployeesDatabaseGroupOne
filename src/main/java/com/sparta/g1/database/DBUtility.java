@@ -68,12 +68,23 @@ public class DBUtility {
         executePreparedStatementUpdate(connection, insertCreateTableSQL);
 
     }
+    private static boolean doesTableExist(Connection connection, String tableName) throws SQLException {
+        DatabaseMetaData metaData = connection.getMetaData();
+        try (ResultSet resultSet = metaData.getTables(null, null, tableName, new String[]{"TABLE"})) {
+            return resultSet.next();
+        }
+    }
 
     public static void tableInit() {
         Connection connection = DBConnection.getInstance().getConnection();
-        dropTable();
-        createEmployeeTable();
-        insertEmployeeIntoDatabase(connection, EmployeeFactory.getEmployees());
+        try {
+            if (!doesTableExist(connection, "EmployeeData")) {
+                createEmployeeTable();
+                insertEmployeeIntoDatabase(connection, EmployeeFactory.getEmployees("src/main/resources/employees.csv"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void insertEmployeeIntoDatabase(Connection connection, Set<String> employees) {
