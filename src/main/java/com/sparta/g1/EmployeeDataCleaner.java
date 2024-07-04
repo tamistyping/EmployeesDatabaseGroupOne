@@ -3,6 +3,8 @@ package com.sparta.g1;
 import com.sparta.g1.logger.AppLogger;
 import com.sparta.g1.utilities.DateValidation;
 
+import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -140,7 +142,35 @@ public class EmployeeDataCleaner {
                 cleanedData.add(line);
             }
         }
+
         return cleanedData;
     }
+
+    public static Object convertToDataType(String value, String dataType) {
+        switch (dataType.toLowerCase()) {
+            case "int":
+                try {
+                    return Integer.parseInt(value);
+                } catch (NumberFormatException e) {
+                    throw new IllegalArgumentException("Invalid integer format for value: " + value, e);
+                }
+            case "date":
+                try {
+                    LocalDate date = LocalDate.parse(value, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    return Date.valueOf(date);
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalArgumentException("Invalid date format for value: " + value + ". Expected format: YYYY-MM-DD", e);
+                }
+            case "char":
+                if (value.length() == 1) {
+                    return value.charAt(0);
+                } else {
+                    throw new IllegalArgumentException("Invalid char format for value: " + value + ". Expected single character.");
+                }
+            default:
+                return value;
+        }
+    }
+
 }
 
