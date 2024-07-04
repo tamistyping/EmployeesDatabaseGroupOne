@@ -12,7 +12,7 @@ import static java.time.format.ResolverStyle.STRICT;
 
 public class DateValidation {
 
-    private static final Logger logger = AppLogger.getLogger(Level.ALL, Level.INFO, false);
+    private static final Logger logger = AppLogger.getLogger(Level.ALL, Level.SEVERE, false);
 
     public static boolean isValidDayOfMonth(int month, int day, int year) {
         if (month < 1 || month > 12 || day < 1) {
