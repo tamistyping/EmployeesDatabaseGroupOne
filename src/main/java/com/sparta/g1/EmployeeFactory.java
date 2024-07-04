@@ -7,7 +7,7 @@ public class EmployeeFactory {
     public static Set<String> getEmployees() throws IOException {
         Set<String> result = new HashSet<>();
 
-        try (BufferedReader f = new BufferedReader(new FileReader("EmployeesProjectG1/src/main/resources/employees.csv"))) {
+        try (BufferedReader f = new BufferedReader(new FileReader("src/main/resources/employees.csv"))) {
             String employeeLine;
             while ((employeeLine = f.readLine()) != null) {
                 result.add(employeeLine);
