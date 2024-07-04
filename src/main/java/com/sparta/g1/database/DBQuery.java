@@ -30,9 +30,9 @@ public class DBQuery implements DatabaseQueries {
     public static void getEmployeeByGender(String employeeGender) {
         String searchParameter = "";
         employeeGender = employeeGender.toLowerCase();
-        if (employeeGender == "male" || employeeGender == "m") {
+        if (employeeGender.equals("male") || employeeGender.equals("m")) {
             searchParameter = "M";
-        } else if (employeeGender == "female" || employeeGender == "f") {
+        } else if (employeeGender.equals("female") || employeeGender.equals("f")) {
             searchParameter = "F";
         }
         try {
