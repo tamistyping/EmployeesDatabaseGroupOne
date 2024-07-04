@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.logging.Level;
@@ -18,16 +19,25 @@ public class EmployeeDataCleaner {
     private static final Logger logger = AppLogger.getLogger(Level.ALL, Level.SEVERE, false);
 
     private static int numberOfCorruptedEntries = 0;
+    private static Set<String> employeeIds = new HashSet<>();
 
     public static boolean isEmployeeIdValid(String empId) {
         if (empId.matches("\\d{6}")) {
-            return true;
+            if (employeeIds.contains(empId)) {
+                numberOfCorruptedEntries++;
+                logger.log(Level.WARNING, "Duplicate Employee ID: " + empId);
+                return false;
+            } else {
+                employeeIds.add(empId);
+                return true;
+            }
         } else {
             numberOfCorruptedEntries++;
-            logger.log(Level.WARNING, "Invalid Employee ID: " + empId);
+            logger.log(Level.WARNING, "Invalid Employee ID format: " + empId);
             return false;
         }
     }
+
 
     public static void isPrefixValid(String prefix) {
     }
@@ -148,16 +158,12 @@ public class EmployeeDataCleaner {
 
     public static Object convertToDataType(String value, String dataType) {
         switch (dataType.toLowerCase()) {
-            case "int":
-                try {
-                    return Integer.parseInt(value);
-                } catch (NumberFormatException e) {
-                    throw new IllegalArgumentException("Invalid integer format for value: " + value, e);
-                }
             case "date":
                 try {
-                    LocalDate date = LocalDate.parse(value, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                    return Date.valueOf(date);
+                    DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("[MM/dd/yyyy][M/d/yyyy][M/dd/yyyy][M/d/yyyy]");
+                    DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    LocalDate date = LocalDate.parse(value, inputFormatter);
+                    return date.format(outputFormatter);
                 } catch (IllegalArgumentException e) {
                     throw new IllegalArgumentException("Invalid date format for value: " + value + ". Expected format: YYYY-MM-DD", e);
                 }
