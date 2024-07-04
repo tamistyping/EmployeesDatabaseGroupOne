@@ -32,6 +32,6 @@ public class EmployeeFactory {
 
         logger.log(Level.INFO, "Number of cleaned entries: " + count);
 
-        return result;
+        return cleanedResult;
     }
 }
