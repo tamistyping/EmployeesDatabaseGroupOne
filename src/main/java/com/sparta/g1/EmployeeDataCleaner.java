@@ -52,11 +52,6 @@ public class EmployeeDataCleaner {
         }
     }
 
-
-
-
-
-
     public static boolean isDateOfBirthValid(String dateOfBirth) {
         boolean isValid = DateValidation.isDateValid(dateOfBirth, 1924, LocalDate.now().getYear(), "Date of Birth");
         if (!isValid) {
@@ -66,34 +61,18 @@ public class EmployeeDataCleaner {
         return isValid;
     }
 
-
-
-
     public static boolean isDateOfJoiningValid(String dateOfJoining, String dateOfBirth) {
         if (!DateValidation.isDateValid(dateOfJoining, 1995, LocalDate.now().getYear(), "Date of Joining")) {
+            logger.log(Level.INFO, "Broke");
             numberOfCorruptedEntries++;
             return false;
         }
-        if (isDojAfterDob(dateOfJoining, dateOfBirth)) {
-            return true;
+        if (!isDojAfterDob(dateOfJoining, dateOfBirth)) {
+            logger.log(Level.WARNING, "Date of Joining is before or same as Date of Birth");
+            numberOfCorruptedEntries++;
+            return false;
         }
-        numberOfCorruptedEntries++;
-        logger.log(Level.WARNING, "Date of Joining is before or same as Date of Birth");
-        return false;
-    }
-
-
-
-    public static boolean isValidSalary(String salary) {
-        try {
-            if (Integer.parseInt(salary) >= 0) {
-                return true;
-            }
-        } catch (NumberFormatException e) {
-            logger.log(Level.WARNING, "Invalid Salary: " + salary, e);
-        }
-        numberOfCorruptedEntries++;
-        return false;
+        return true;
     }
 
     public static boolean isDojAfterDob(String dateOfJoining, String dateOfBirth) {
@@ -108,6 +87,18 @@ public class EmployeeDataCleaner {
         }
     }
 
+    public static boolean isValidSalary(String salary) {
+        try {
+            if (Integer.parseInt(salary) >= 0) {
+                return true;
+            }
+        } catch (NumberFormatException e) {
+            logger.log(Level.WARNING, "Invalid Salary: " + salary, e);
+        }
+        numberOfCorruptedEntries++;
+        return false;
+    }
+
 
     public static int getNumberOfCorruptedEntries() {
         logger.log(Level.INFO, "Number of corrupted entries: " + numberOfCorruptedEntries);
@@ -117,7 +108,8 @@ public class EmployeeDataCleaner {
     public static DateTimeFormatter formatDates() {
         return DateTimeFormatter.ofPattern("[MM/dd/yyyy][M/d/yyyy][M/dd/yyyy][M/d/yyyy]");
     }
-    public static Set<String> cleanData(Set<String> employeeData) {
+
+    public static LinkedHashSet<String> cleanData(LinkedHashSet<String> employeeData) {
         LinkedHashSet<String> cleanedData = new LinkedHashSet<>();
         for (String line : employeeData) {
             String[] parts = line.split(",");

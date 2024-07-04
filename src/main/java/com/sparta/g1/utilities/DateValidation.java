@@ -32,10 +32,13 @@ public class DateValidation {
     public static boolean isDateValid(String date, int minYear, int maxYear, String dateType) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[MM/dd/yyyy][M/d/yyyy][M/dd/yyyy][M/d/yyyy]");
-            LocalDate parsedDate = LocalDate.parse(date, formatter.withResolverStyle(STRICT));
-            int year = parsedDate.getYear();
-            int month = parsedDate.getMonthValue();
-            int day = parsedDate.getDayOfMonth();
+            String[] parts = date.split("/");
+
+            int year = Integer.parseInt(parts[2]);
+            int month = Integer.parseInt(parts[0]);
+            int day = Integer.parseInt(parts[1]);
+
+
 
             if (year < minYear || year > maxYear || !isValidDayOfMonth(month, day, year)) {
                 logger.log(Level.WARNING, "Invalid " + dateType + ": " + date);
@@ -44,6 +47,11 @@ public class DateValidation {
             return true;
         } catch (DateTimeParseException e) {
             logger.log(Level.WARNING, "Invalid " + dateType + " format: " + date, e);
+            logger.log(Level.INFO, "Broke");
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[MM/dd/yyyy][M/d/yyyy][M/dd/yyyy][M/d/yyyy]");
+            LocalDate parsedDate = LocalDate.parse(date, formatter.withResolverStyle(STRICT));
+            logger.log(Level.INFO, String.valueOf(parsedDate));
             return false;
         }
     }

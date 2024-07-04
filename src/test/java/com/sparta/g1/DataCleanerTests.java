@@ -141,8 +141,8 @@ public class DataCleanerTests {
     @Test
     @DisplayName("Check Valid Date of Joining Returns True")
     void checkValidDateOfJoiningReturnsTrue() {
-        String doj = "03/11/2009";
-        String dob = "01/01/1990";
+        String doj = "03/11/2016";
+        String dob = "01/01/1996";
         Boolean expected = true;
         boolean actual = EmployeeDataCleaner.isDateOfJoiningValid(doj, dob);
         Assertions.assertEquals(expected, actual);
@@ -284,6 +284,18 @@ public class DataCleanerTests {
         String dob = "01/01/1990";
         boolean actual = EmployeeDataCleaner.isDateOfJoiningValid(doj, dob);
         Assertions.assertFalse(actual);
+    }
+
+    @Test
+    @DisplayName("check valid date returns true for isDateValid")
+    void checkValidDateReturnsTrueForIsDateValid() {
+        String date = "04/31/2013";
+        int year = 2013;
+        int month = 3;
+        int day = 3;
+        boolean expected = false;
+        boolean actual = DateValidation.isDateValid(date, 1995, LocalDate.now().getYear(), "Date of Joining");
+        Assertions.assertEquals(expected, actual);
     }
 
 }
