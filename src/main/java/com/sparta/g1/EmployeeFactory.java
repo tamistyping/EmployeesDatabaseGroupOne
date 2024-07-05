@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 
 public class EmployeeFactory {
 
-    private static final Logger logger = AppLogger.getLogger(Level.SEVERE, Level.SEVERE, false);
+    private static final Logger logger = AppLogger.getLogger(Level.INFO, Level.SEVERE, false);
 
     public static Set<String> getEmployees(String path){
         Set<String> result = new HashSet<>();
