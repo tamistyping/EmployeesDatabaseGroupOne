@@ -121,7 +121,18 @@ public class DBQuery implements DatabaseQueries {
         }
         DBUtility.executePreparedStatementUpdate(
                 connection, DatabaseQueries.INSERT_EMPLOYEE, employeeId, prefix, firstName, middleInitial, lastName, gender, email, dateOfBirth, startDate, salary);
-
     }
+
+    public static void updateEmployee(String employeeId, String prefix, String firstName, String middleInitial,
+                                      String lastName, String gender, String email, String dateOfBirth, String startDate, String salary) {
+        DBUtility.executePreparedStatementUpdate(
+                connection, DatabaseQueries.UPDATE_EMPLOYEE, prefix, firstName, middleInitial, lastName, gender, email, dateOfBirth, startDate, salary, employeeId);
+    }
+
+    public static void deleteEmployee(String employeeId) {
+        DBUtility.executePreparedStatementUpdate(
+                connection, DatabaseQueries.DELETE_EMPLOYEE, employeeId);
+    }
+
 
 }
