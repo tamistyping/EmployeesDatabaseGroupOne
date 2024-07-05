@@ -75,7 +75,7 @@ public class EmployeeDataCleaner {
 
     public static boolean isDateOfJoiningValid(String dateOfJoining, String dateOfBirth) {
         if (!DateValidation.isDateValid(dateOfJoining, 1995, LocalDate.now().getYear(), "Date of Joining")) {
-            logger.log(Level.INFO, "Date of Joining is before company was founded or in the future " + dateOfJoining);
+            logger.log(Level.WARNING, "Date of Joining is before company was founded or in the future " + dateOfJoining);
             numberOfCorruptedEntries++;
             return false;
         }
@@ -147,7 +147,7 @@ public class EmployeeDataCleaner {
                     isValidSalary(salary)) {
                 cleanedData.add(line);
             } else {
-                logger.log(Level.WARNING, "Invalid data: " + line);
+                logger.log(Level.INFO, "Invalid data: " + line);
             }
         }
 
