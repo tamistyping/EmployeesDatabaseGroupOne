@@ -10,7 +10,7 @@ public class App {
 
     public static void main(String[] args) {
         DBUtility.tableInit(connection);
-        DBQuery.getEmployeeByName("ren");
+
 
         DBConnection.getInstance().closeConnection();
     }
