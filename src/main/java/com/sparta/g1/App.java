@@ -9,9 +9,13 @@ public class App {
     public static Connection connection = DBConnection.getInstance().getConnection();
 
     public static void main(String[] args) {
+        //DBUtility.dropTable();
         DBUtility.tableInit(connection);
-
+      
+        DBQuery.getEmployeeByGender("Femaefele");
 
         DBConnection.getInstance().closeConnection();
+
+        System.out.println(EmployeeDataCleaner.getNumberOfCorruptedEntries());
     }
 }

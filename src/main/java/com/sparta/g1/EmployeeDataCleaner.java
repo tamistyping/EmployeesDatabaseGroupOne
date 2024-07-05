@@ -3,8 +3,6 @@ package com.sparta.g1;
 import com.sparta.g1.logger.AppLogger;
 import com.sparta.g1.utilities.DateValidation;
 
-import java.sql.Date;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -16,9 +14,9 @@ import java.util.logging.Logger;
 
 public class EmployeeDataCleaner {
 
-    private static final Logger logger = AppLogger.getLogger(Level.ALL, Level.SEVERE, false);
+    private static final Logger logger = AppLogger.getLogger(Level.INFO, Level.INFO, true);
 
-    private static int numberOfCorruptedEntries = 0;
+    private static int numberOfCorruptedEntries;
     private static Set<String> employeeIds = new HashSet<>();
 
     public static boolean isEmployeeIdValid(String empId) {
@@ -38,14 +36,12 @@ public class EmployeeDataCleaner {
         }
     }
 
-
-    public static void isPrefixValid(String prefix) {
-    }
     public static boolean isNameValid(String name) {
         String nameRegex = "^[a-zA-Z\\-]+$";
         if (name.matches(nameRegex)) {
             return true;
         }
+        logger.log(Level.WARNING, "Invalid name: " + name);
         numberOfCorruptedEntries++;
         return false;
     }
@@ -79,12 +75,12 @@ public class EmployeeDataCleaner {
 
     public static boolean isDateOfJoiningValid(String dateOfJoining, String dateOfBirth) {
         if (!DateValidation.isDateValid(dateOfJoining, 1995, LocalDate.now().getYear(), "Date of Joining")) {
-            logger.log(Level.INFO, "Broke");
+            logger.log(Level.INFO, "Date of Joining is before company was founded or in the future " + dateOfJoining);
             numberOfCorruptedEntries++;
             return false;
         }
         if (!isDojAfterDob(dateOfJoining, dateOfBirth)) {
-            logger.log(Level.WARNING, "Date of Joining is before or same as Date of Birth");
+            logger.log(Level.WARNING, "Date of Joining is before or same as Date of Birth " + dateOfJoining + ", " + dateOfBirth);
             numberOfCorruptedEntries++;
             return false;
         }
@@ -121,10 +117,6 @@ public class EmployeeDataCleaner {
         return numberOfCorruptedEntries;
     }
 
-    public static DateTimeFormatter formatDates() {
-        return DateTimeFormatter.ofPattern("[MM/dd/yyyy][M/d/yyyy][M/dd/yyyy][M/d/yyyy]");
-    }
-
     public static Set<String> cleanData(Set<String> employeeData) {
         LinkedHashSet<String> cleanedData = new LinkedHashSet<>();
         for (String line : employeeData) {
@@ -154,6 +146,8 @@ public class EmployeeDataCleaner {
                     isDateOfJoiningValid(dateOfJoining, dateOfBirth) &&
                     isValidSalary(salary)) {
                 cleanedData.add(line);
+            } else {
+                logger.log(Level.WARNING, "Invalid data: " + line);
             }
         }
 
@@ -169,6 +163,7 @@ public class EmployeeDataCleaner {
                     LocalDate date = LocalDate.parse(value, inputFormatter);
                     return date.format(outputFormatter);
                 } catch (IllegalArgumentException e) {
+
                     throw new IllegalArgumentException("Invalid date format for value: " + value + ". Expected format: YYYY-MM-DD", e);
                 }
             case "char":
