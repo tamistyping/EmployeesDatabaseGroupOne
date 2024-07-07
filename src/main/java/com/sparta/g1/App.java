@@ -12,8 +12,9 @@ public class App {
         //DBUtility.dropTable();
         DBUtility.tableInit(connection);
       
-        DBQuery.getEmployeeByGender("Femaefele");
+        //DBQuery.getEmployeeByGender("f");
 
+        DBQuery.addEmployee("1", "Mr", "John", "D", "Doe", "M", "asdfg@gmail.com", "1999-10-10", "1995-10-10", "11111");
         DBConnection.getInstance().closeConnection();
 
         System.out.println(EmployeeDataCleaner.getNumberOfCorruptedEntries());

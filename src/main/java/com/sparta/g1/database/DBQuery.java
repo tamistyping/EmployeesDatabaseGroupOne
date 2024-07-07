@@ -1,11 +1,14 @@
 package com.sparta.g1.database;
 
+import com.sparta.g1.EmployeeDataCleaner;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import static com.sparta.g1.App.connection;
+import static com.sparta.g1.EmployeeDataCleaner.checkNewEmployee;
 
 public class DBQuery implements DatabaseQueries {
     public static void getEmployeeById(String employeeID) {
@@ -119,8 +122,11 @@ public class DBQuery implements DatabaseQueries {
         if (middleInitial == "" || middleInitial == null) {
             middleInitial = null;
         }
-        DBUtility.executePreparedStatementUpdate(
-                connection, DatabaseQueries.INSERT_EMPLOYEE, employeeId, prefix, firstName, middleInitial, lastName, gender, email, dateOfBirth, startDate, salary);
+        if (checkNewEmployee(employeeId, prefix, firstName, middleInitial, lastName, gender, email, dateOfBirth, startDate, salary)){
+            DBUtility.executePreparedStatementUpdate(connection, INSERT_EMPLOYEE, employeeId, prefix, firstName, middleInitial, lastName, gender, email, dateOfBirth, startDate, salary);
+        } else {
+            System.out.println("Invalid employee data. Please check the data and try again.");
+        }
     }
 
     public static void updateEmployee(String employeeId, String prefix, String firstName, String middleInitial,

@@ -154,6 +154,24 @@ public class EmployeeDataCleaner {
         return cleanedData;
     }
 
+    public static boolean checkNewEmployee(String employeeId, String prefix, String firstName, String middleInitial,
+                                           String lastName, String gender, String email, String dateOfBirth, String startDate, String salary) {
+
+        if (isEmployeeIdValid(employeeId) &&
+                isNameValid(firstName) &&
+                isNameValid(lastName) &&
+                isGenderValid(gender) &&
+                isEmailValid(email) &&
+                isDateOfBirthValid(dateOfBirth) &&
+                isDateOfJoiningValid(startDate, dateOfBirth) &&
+                isValidSalary(salary)) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
     public static Object convertToDataType(String value, String dataType) {
         switch (dataType.toLowerCase()) {
             case "date":

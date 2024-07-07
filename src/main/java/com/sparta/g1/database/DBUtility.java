@@ -45,14 +45,14 @@ public class DBUtility {
     }
 
     public static void dropTable() {
-        String insertDropTableSQL = "DROP TABLE IF EXISTS EmployeeData;";
+        String insertDropTableSQL = "DROP TABLE IF EXISTS employeestb;";
         Connection connection = DBConnection.getInstance().getConnection();
         executePreparedStatementUpdate(connection, insertDropTableSQL);
     }
 
     public static void createEmployeeTable() {
         String insertCreateTableSQL =
-                ("CREATE TABLE EmployeeData (\n" +
+                ("CREATE TABLE employeestb (\n" +
                 "    EmpID INT PRIMARY KEY,\n" +
                 "    NamePrefix VARCHAR(10),\n" +
                 "    FirstName VARCHAR(50),\n" +
@@ -77,7 +77,7 @@ public class DBUtility {
 
     public static void tableInit(Connection connection) {
         try {
-            if (!doesTableExist(connection, "EmployeeData")) {
+            if (!doesTableExist(connection, "employeestb")) {
                 createEmployeeTable();
                 insertEmployeeIntoDatabase(connection, EmployeeFactory.getEmployees("src/main/resources/employees.csv"));
             }
@@ -87,7 +87,7 @@ public class DBUtility {
     }
 
     public static void insertEmployeeIntoDatabase(Connection connection, Set<String> employees) {
-        String insertEmployeeSQL = "INSERT INTO EmployeeData (EmpID, NamePrefix, FirstName, MiddleInitial, LastName, Gender, Email, DateOfBirth, DateOfJoining, Salary) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertEmployeeSQL = "INSERT INTO employeestb (EmpID, NamePrefix, FirstName, MiddleInitial, LastName, Gender, Email, DateOfBirth, DateOfJoining, Salary) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             for (String employee: employees) {
                 String[] fields = employee.split(",");
                 try {
