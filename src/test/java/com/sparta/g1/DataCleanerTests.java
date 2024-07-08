@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.*;
 
 public class DataCleanerTests {
     private Employee bibi;
@@ -19,7 +20,6 @@ public class DataCleanerTests {
     private Employee jane;
     private Employee bob;
     private Employee alice;
-
 
     @BeforeEach
     void setup() {
@@ -34,7 +34,6 @@ public class DataCleanerTests {
         bob = new Employee("7890", "Mr.", "Bob", "B", "Builder", "M", "bob.builder@gmail.com", LocalDate.of(1970, 1, 1), LocalDate.of(1990, 1, 1), "789012");
         // Date of birth is not before date of joining
         alice = new Employee("987654", "Ms.", "Alice", "A", "Adams", "F", "alice.adams@gmail.com", LocalDate.of(2000, 1, 1), LocalDate.of(1990, 1, 1), "987654");
-
     }
 
 
